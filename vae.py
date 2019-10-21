@@ -12,7 +12,7 @@ class VAE:
 
 		self.latent_dim = Config.latent_dim
 		self.filters = Config.filters
-		self.last_convdim = Config.last_convdim  # images are downsampled to (4*4*1024) for celeba before dense layer
+		self.last_convdim = Config.last_convdim  # images are downsampled to (8*8*512) for celeba before dense layer
 		self.training = training
 		self.kl_weight = Config.kl_weight
 

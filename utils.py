@@ -1,4 +1,5 @@
 import PIL
+from PIL import Image
 import glob
 import numpy as np
 
@@ -41,8 +42,8 @@ def save_image_grid(images, filename, drange=[0,1], grid_size=None):
 
 def make_training_gif(img_dir):
 	image_grids = []
-	filenames = sorted(glob.glob('*_fake.jpg'))
+	filenames = sorted(glob.glob('fakes_*.jpg'))
 	for file in filenames:
-		image = PIL.Image.open(file)
+		image = Image.open(file)
 		image_grids.append(image)
-	image_grids[0].save('vae_training.gif', format='GIF', append_images=image_grids[1:], save_all=True, duration=1000, loop=0)
+	image_grids[0].save('vae_training.gif', format='GIF', append_images=image_grids[1:], save_all=True, duration=500, loop=0)

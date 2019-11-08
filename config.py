@@ -22,7 +22,7 @@ class Config:
 	total_training_imgs = 202599  # Total uncorrupted images for CelebA
 	batch_size = 32     # Configure it based on available GPU memory
 	num_epochs = 30
-	image_snapshot_freq = 500  # Number of batches shown in between image_grid snapshots
+	image_snapshot_freq = 1000  # Number of batches shown in between image_grid snapshots
 
 	#Adam optimizer parameters
 	beta1 = 0.5

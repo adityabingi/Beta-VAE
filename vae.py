@@ -12,7 +12,7 @@ class VAE:
 
 		self.latent_dim = Config.latent_dim
 		self.filters = Config.filters
-		self.last_convdim = Config.last_convdim  # images are downsampled to (8*8*512) for celeba before dense layer
+		self.last_convdim = Config.last_convdim  # images are downsampled to (4*4*1024) for celeba before dense layer
 		self.training = training
 		self.kl_weight = Config.kl_weight
 
@@ -76,7 +76,7 @@ class VAE:
 
 		"""Sample from Gaussian Distribution """
 		with tf.name_scope('reparameterize'):
-			eps = tf.random.uniform(shape =tf.shape(mean))
+			eps = tf.random.normal(shape =tf.shape(mean))
 			z = mean + tf.exp(0.5*logvar) * eps
 		return z
 
@@ -93,10 +93,15 @@ class VAE:
 		return output, mean_and_var_summary
 
 	def compute_loss(self, reals, recon_imgs):
-
+		N = Config.img_shape[0] * Config.img_shape[1] * Config.img_shape[2]
+		m = self.latent_dim
 		with tf.name_scope('Loss'):
 			rec_loss =  tf.reduce_sum(tf.square(reals - recon_imgs))
+			rec_loss = rec_loss/N
+			rec_los  = rec_loss/Config.batch_size
 			kl_loss  =  tf.reduce_sum(- 0.5 * tf.reduce_sum(1 + self.z_logvar - tf.square(self.z_mean) - tf.exp(self.z_logvar),1))
+			kl_loss = kl_loss/m
+			kl_loss = kl_loss/Config.batch_size
 			total_loss = rec_loss + self.kl_weight * kl_loss
 
 		return [total_loss, rec_loss, kl_loss]
@@ -132,7 +137,8 @@ def train(sess, vae, dataset):
 	loss_values= vae.compute_loss(reals=processed_imgs , recon_imgs=recon_imgs)
 	total_loss = loss_values[0]
 	learning_rate_ph = tf.compat.v1.placeholder(tf.float32, shape=None)
-	optimize_op = tf.compat.v1.train.AdamOptimizer(learning_rate = learning_rate_ph).minimize(total_loss)
+	optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate = learning_rate_ph, beta1=Config.beta1, beta2=Config.beta2)
+	optimize_op = optimizer.minimize(total_loss)
 	update_ops = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.UPDATE_OPS)
 	train_op = tf.group(optimize_op, update_ops)
 
@@ -150,7 +156,7 @@ def train(sess, vae, dataset):
 	batch_count = 0
 	learning_rate = Config.initial_learning_rate
 	for epoch in range(1, num_epochs+1):
-		learning_rate = lr_schedule(epoch, previous_lr = learning_rate)
+		#learning_rate = lr_schedule(epoch, previous_lr = learning_rate)
 		reals, reconstructed = [], []
 		print("At Epoch {}".format(epoch))
 		print("------------------------------------------")

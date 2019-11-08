@@ -1,5 +1,6 @@
-import numpy as np
 import PIL
+import glob
+import numpy as np
 
 def adjust_data_range(data, drange_in, drange_out):
     if drange_in != drange_out:

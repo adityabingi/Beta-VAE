@@ -1,7 +1,7 @@
 class Config:
 
 	# dataset preparation config for CelebA dataset
-	data_dir_path = 'celebA/img_align_celeba/'
+	data_dir_path = 'CelebA/img_align_celeba/'
 	tfrecord_dir = 'tfrecords/'  # dir where tfrecords are saved
 	data_crop = [57, 21, 128, 128] # [crop-y(top-left y), crop-x(top-left x), crop-height, crop-width] (128 x 128 resolution images are taken)
 	img_shape = (128, 128, 3) # image shape for Variational Autoencoder
@@ -17,15 +17,16 @@ class Config:
 	last_convdim = int(img_shape[0]/(2**len(filters))) # images are downsampled to (8*8*512) before dense layer
 
 	#training parameters
-	initial_learning_rate = 0.0005
-
-	kl_weight = 0.01
-
+	initial_learning_rate = 0.0001
+	kl_weight = 0.5
 	total_training_imgs = 202599  # Total uncorrupted images for CelebA
 	batch_size = 32     # Configure it based on available GPU memory
 	num_epochs = 30
 	image_snapshot_freq = 500  # Number of batches shown in between image_grid snapshots
 
+	#Adam optimizer parameters
+	beta1 = 0.5
+	beta2 = 0.999
 
 	#results
 	modelDir = 'model/'

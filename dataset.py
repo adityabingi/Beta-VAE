@@ -26,7 +26,7 @@ def load_and_preprocess(img_path):
 def write_tfrecord(img_paths, tfrec_path):
 
 	path_ds = tf.data.Dataset.from_tensor_slices(img_paths)
-	image_ds = path_ds.map(load_and_preprocess, num_parallel_calls =8) # Num_parallel_calls = no.of.cpu_cores
+	image_ds = path_ds.map(load_and_preprocess, num_parallel_calls =4) # Num_parallel_calls = no.of.cpu_cores
 	proto_ds = image_ds.map(tf.io.serialize_tensor)
 	tfrec = tf.data.experimental.TFRecordWriter(tfrec_path)
 	tfrec_op = tfrec.write(proto_ds)
@@ -53,7 +53,7 @@ def parse_fn(tfrecord):
 def prepare_dataset(tfrecord_file):
 
 	dataset = tf.data.TFRecordDataset(tfrecord_file)
-	dataset = dataset.map(map_func=parse_fn, num_parallel_calls=8)
+	dataset = dataset.map(map_func=parse_fn, num_parallel_calls=4)
 	#dataset = dataset.shuffle(buffer_size=Config.total_training_imgs, reshuffle_each_iteration=False)
 	dataset = dataset.batch(batch_size=Config.batch_size, drop_remainder=True)
 	dataset = dataset.repeat(Config.num_epochs)

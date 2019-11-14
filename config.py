@@ -12,17 +12,17 @@ class Config:
 	epsilon  = 1e-5
 
 	# VAE architecture 
-	latent_dim = 128
+	latent_dim = 32
 	filters = [64, 128, 256, 512]
 	last_convdim = int(img_shape[0]/(2**len(filters))) # images are downsampled to (8*8*512) before dense layer
 
 	#training parameters
 	initial_learning_rate = 0.0001
-	kl_weight = 0.5
+	kl_weight = 0.7
 	total_training_imgs = 202599  # Total uncorrupted images for CelebA
 	batch_size = 32     # Configure it based on available GPU memory
 	num_epochs = 30
-	image_snapshot_freq = 1000  # Number of batches shown in between image_grid snapshots
+	image_snapshot_freq = 500  # Number of batches shown in between image_grid snapshots
 
 	#Adam optimizer parameters
 	beta1 = 0.5
@@ -30,7 +30,7 @@ class Config:
 
 	#results
 	modelDir = 'model/'
-	summaryDir = 'summaries/run1/'
+	summaryDir = 'summaries/run3/'
 	num_gen_imgs = 32   # number of images to generate
 	grid_size = (4, 8)  # results are saved to an image grid of this size 
 	results_dir = 'results/'

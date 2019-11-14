@@ -57,7 +57,7 @@ def prepare_dataset(tfrecord_file):
 	#dataset = dataset.shuffle(buffer_size=Config.total_training_imgs, reshuffle_each_iteration=False)
 	dataset = dataset.batch(batch_size=Config.batch_size, drop_remainder=True)
 	dataset = dataset.repeat(Config.num_epochs)
-	dataset = dataset.prefetch(buffer_size = 1)
+	dataset = dataset.prefetch(buffer_size = 2)
 	return dataset
 
 def main():

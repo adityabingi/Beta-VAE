@@ -1,5 +1,5 @@
-# Variational-AutoEncoder
-Tensorflow implementation of Variational-AutoEncoder for CelebA dataset
+# Beta-VAE
+Tensorflow implementation of Beta-Variational-AutoEncoder for CelebA dataset
 
 # Results
 Random generation during course of training

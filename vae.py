@@ -38,11 +38,12 @@ def train(sess, vae):
 		for batch in range(batches_per_epoch):
 			batch_count+=1
 			_, loss_vals, real, recon, mean_var_summ = sess.run([vae.train_op, vae.loss_values,\
-														vae.real_img, vae.recon_img, vae.mean_var_summary],\
-														feed_dict={vae.learning_rate_ph:lr})
+				vae.real_img, vae.recon_img, vae.mean_var_summary],\
+				feed_dict={vae.learning_rate_ph:lr})
 
 			loss_summ = sess.run(vae.loss_summary, feed_dict={vae.total_loss_ph:loss_vals[0], \
-									vae.rec_loss_ph:loss_vals[1], vae.kl_loss_ph:loss_vals[2]})
+				vae.rec_loss_ph:loss_vals[1], vae.kl_loss_ph:loss_vals[2]})
+
 			train_writer.add_summary(loss_summ, batch_count)
 			train_writer.add_summary(mean_var_summ, batch_count)
 
@@ -75,36 +76,33 @@ def generate_fake_images(sess, vae, random_vector, filename):
 	fake_images = sess.run(gen_fakes)
 	save_image_grid(fake_images, filename, drange=[0,1], grid_size=Config.grid_size)
 
-def traverse_latents(sess, vae, target_dim, filename):
+def traverse_latents(sess, vae):
 
-	np.random.seed(183)
-	random_img_z = np.random.normal(size=[1, vae.latent_dim])
-	seed_z = np.float32(random_img_z)
+	random_seeds = [42, 62, 1024, 72, 92] # These random seeds are chosen after visual inspection 
+					      # Seeds can also be chosen randomly
+	seed_zs =[]
 
-	"""seed_img = load_and_preprocess(Config.data_dir_path+'000008.jpg')
-	seed_img = tf.expand_dims(seed_img, axis=0)
-	seed_img = tf.cast(seed_img, tf.float32)
-	inputs = adjust_data_range(seed_img, drange_in=[0,255], drange_out=[0,1])
+	for seed in random_seeds:
+		np.random.seed(seed)
+		random_img_z = np.random.normal(size=[vae.latent_dim])
+		seed_z = np.float32(random_img_z)
+		seed_zs.append(seed_z)
 
-	seed_img_z, seed_img_z_logvar = vae.encode(inputs)
-	#seed_sample_z = vae.sample(seed_img_z, seed_img_z_logvar)
-	seed_z = sess.run(seed_img_z)"""
-
-	interpolation = np.linspace(start=-3.0, stop=3.0, num=10)
-	z = seed_z.copy()
-	traversal_vector = np.zeros([interpolation.shape[0], vae.latent_dim])
-	for i in range(interpolation.shape[0]):
-		z_mean = z.copy()
-		z_mean[:,target_dim] = interpolation[i]
-		#print(z_mean)
-		traversal_vector[i] = z_mean[0]
-
-	print(traversal_vector)
-	traversal_vector=np.float32(traversal_vector)
-	latent_img = vae.decode(inputs=traversal_vector)
-	traverse_imgs = sess.run(latent_img)
-
-	save_image_grid(traverse_imgs, filename, grid_size=(1, 10))
+	seed_zs = np.array(seed_zs)
+	
+	for dim in range(vae.latent_dim):
+		interpolation = np.linspace(start=-3.0, stop=3.0, num=10)
+		traversal_vectors = np.zeros([seed_zs.shape[0]*interpolation.shape[0], seed_zs.shape[1]])
+		for i in range(seed_zs.shape[0]):
+			z_s = seed_zs.copy()
+			one_seed_z = z_s[i]
+			traversal_vectors[i*interpolation.shape[0]:(i+1)*interpolation.shape[0]] = one_seed_z
+			traversal_vectors[i*interpolation.shape[0]:(i+1)*interpolation.shape[0], dim] = interpolation
+			
+		traversal_vectors =np.float32(traversal_vectors)
+		latent_imgs = vae.decode(inputs=traversal_vectors)
+		traverse_imgs = sess.run(latent_imgs)
+		save_image_grid(traverse_imgs, Config.results_dir+'traverse_latentdim{}.jpg'.format(dim), grid_size=(5, 10))
 
 def make_session():
 
@@ -118,7 +116,7 @@ def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--train', help='train variational autoencoder', action='store_true')
 	parser.add_argument('--generate',help='generate images', action='store_true')
-	parser.add_argument('--traverse', nargs=1, help='traverse latent space in specified dimension', type=int)
+	parser.add_argument('--traverse',help='traverse latent space', action='store_true')
 	args = parser.parse_args()
 
 	sess = make_session()
@@ -140,10 +138,8 @@ def main():
 			filename = Config.results_dir + 'randomFakeGrid.jpg'
 			gen_imgs = generate_fake_images(sess, vae, random_vector, filename)
 			
-
 		if(args.traverse):
-			filename = Config.results_dir + 'traverse_latent.jpg'
-			traverse_latents(sess, vae, target_dim=args.traverse[0], filename =filename)
+			traverse_latents(sess, vae)
 
 if __name__=='__main__':
 	main()

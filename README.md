@@ -9,6 +9,25 @@ For more on VAE's and Beta-VAE's refer these works:
 3. [β-VAE: LEARNING BASIC VISUAL CONCEPTS WITH A CONSTRAINED VARIATIONAL FRAMEWORK](https://openreview.net/pdf?id=Sy2fzU9gl)
 4. [Understanding disentangling in β-VAE](https://arxiv.org/pdf/1804.03599.pdf)
 
+Code compatibility:
+python>=3.6
+Tensorflow==1.14.0
+
+## Dataset
+
+`python download_celebA.py 0B7EVK8r0v71pZjFTYXZWM3FlRnM CelebA.zip`
+
+## Usage
+
+For training:
+`python vae.py --train`
+
+For generating new samples:
+`python vae.py --generate`
+
+For latent space traversal:
+`python vae.py --traverse`
+
 # Results
 Random generation during course of training
 ![training-result](results/vae_training.gif)

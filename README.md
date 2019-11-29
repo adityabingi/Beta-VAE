@@ -29,12 +29,34 @@ For latent space traversal:
 `python vae.py --traverse`
 
 # Results
-Random generation during course of training
-![training-result](results/vae_training.gif)
 
-Random Generation after 26 Epochs:
-![results_26epoch](results/fakes_epoch26_batch05000.jpg)
+Disentanglement obtained by carefully tuning beta-norm(βnorm). As this work is completely unsupervised visual inspection of latent space traversal showed best disentangled representations at βnorm = 0.7.
 
+Following are the latent space traversal images obtained by fixing a particular dimension of latent vector and interpolating that dimension in the range [-3.0, 3.0]  for 5 randomly chosen seed latent vectors. It can be observed that Beta-VAE discovered latent generating factors such as Smile, Facial brightness, Baldness and others.
 
+## Smile:
+Left to right smiling face to serious look
 
+Seed1:
+![smile-seed1](results/traverse_latentdim4_seed1.jpg)
 
+Seed2:
+![smile-seed2](results/traverse_latentdim4_seed2.jpg)
+
+## Facial Brightness:
+Increase of facial brightness can be observed from left to right
+
+Seed1:
+![brightness-seed1](results/traverse_latentdim1_seed1.jpg)
+
+Seed2:
+![brightness-seed2](results/traverse_latentdim1_seed2.jpg)
+
+## Baldness:
+Hair transition can be observed from left to right
+
+Seed1:
+![baldness-seed1](results/traverse_latentdim24_seed1.jpg)
+
+Seed2:
+![baldness-seed2](results/traverse_latentdim24_seed2.jpg)

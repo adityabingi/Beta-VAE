@@ -17,6 +17,12 @@ Tensorflow==1.14.0
 
 `python download_celebA.py 0B7EVK8r0v71pZjFTYXZWM3FlRnM CelebA.zip`
 
+Extract CelebA.zip and the images are found in the img_align_celeba folder.
+
+Data Processing:
+
+All the images in the celeba dataset are of (218 ,178, 3) resolution and for this work all the images are cropped by carefully choosing the common face region (128, 128, 3) in all the images. Check data_crop in config.py
+
 ## Usage
 
 For training:

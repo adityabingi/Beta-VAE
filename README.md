@@ -66,3 +66,12 @@ Seed1:
 
 Seed2:
 ![baldness-seed2](results/traverse_latentdim24_seed2.jpg)
+
+## Skin Tone:
+Transition of skin tone can be observed from left to right
+
+Seed1:
+![skintone-seed1](results/traverse_latentdim7_seed1.jpg)
+
+Seed2:
+![skintone-seed2](results/traverse_latentdim7_seed2.jpg)

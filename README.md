@@ -36,7 +36,7 @@ For latent space traversal:
 
 # Results
 
-Disentanglement obtained by carefully tuning beta-norm(βnorm). As this work is completely unsupervised visual inspection of latent space traversal showed best disentangled representations at βnorm = 0.7.
+Disentanglement obtained by carefully tuning beta-norm(βnorm). As this work is completely unsupervised visual inspection of latent space traversal showed best disentangled representations at βnorm = 0.7(kl_weight in config.py).
 
 Following are the latent space traversal images obtained by fixing a particular dimension of latent vector and interpolating that dimension in the range [-3.0, 3.0]  for 5 randomly chosen seed latent vectors. It can be observed that Beta-VAE discovered latent generating factors such as Smile, Facial brightness, Baldness and others.
 

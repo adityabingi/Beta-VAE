@@ -75,3 +75,10 @@ Seed1:
 
 Seed2:
 ![skintone-seed2](results/traverse_latentdim7_seed2.jpg)
+
+# Tensorboard Training Plots
+Plots for KL-loss, Reconstruction-loss and Total-loss observed during training. X-axis indicates batches trained and loss values are plotted along y-direction.
+
+![kl-loss](results/kl_loss_tensorboard.png)       ![rec-loss](results/rec_loss_tensorboard.png)
+
+![tot-loss](results/tot_loss_tensorboard.png)
